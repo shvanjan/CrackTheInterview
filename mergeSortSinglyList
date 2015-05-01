@@ -1,0 +1,171 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
+
+
+struct node {
+	int data;
+	struct node* next;
+} ;
+	
+	
+typedef struct node* node;
+
+
+
+void printLinkedList(node start){
+	node first;
+	if(start==NULL){
+		printf("\nEmpty Linked list\n");
+	}
+	first = start;
+
+	do{
+			
+		printf("%d ", first->data);		
+		first = first->next;
+		
+	} while(first!=NULL);
+	printf("\n");
+}
+// function to reverse a singly linked list, returns the head of reversed linked list
+node reverseLinkedList(node start)
+{
+	if(start==NULL)
+	{
+		return NULL;
+		
+	}
+	
+	node first, second, temp;
+	first = start;
+	second = first->next;
+	first->next = NULL;
+	
+	while(second!=NULL){
+		temp = second->next;
+		second->next = first;
+		first = second;
+		second = temp;
+	}
+	
+	start = first;
+	
+	return first;	
+	
+}
+	
+	
+node makeNewNode(int data)
+{
+	node new_node;
+	
+	new_node = (node)malloc(sizeof(struct node));
+	new_node->data = data;
+	new_node->next = NULL;
+	return new_node;
+}
+
+
+
+node makeLinkedList(int List[], int length){
+	
+	int loop_ptr;
+	node new_node, previous = NULL, start = NULL;
+	
+	for(loop_ptr = 0; loop_ptr < length; loop_ptr++)
+	{
+		
+		new_node = makeNewNode(List[loop_ptr]);		
+		if(previous!=NULL){			
+			previous->next = new_node;
+		} else{
+			start = new_node;
+		}
+		
+		previous = new_node;
+	}
+		
+	new_node->next = NULL;
+	return start;
+};
+
+node merge(node ptr1, node ptr2){
+	node merged_list = NULL, new_node, prev_node;
+	
+	while(ptr1!=NULL && ptr2!=NULL){
+		if(ptr1->data <= ptr2->data){
+			new_node = ptr1;	
+			ptr1 = ptr1->next;
+		} else {
+			new_node = ptr2;
+			ptr2 = ptr2->next;
+		}		
+		 
+				
+		if(merged_list == NULL){			
+			merged_list = new_node;
+		} else {
+			prev_node->next = new_node;
+		}
+		
+		prev_node = new_node;
+	}
+	
+	if(ptr1==NULL ){
+		prev_node->next = ptr2;
+	} else {		
+		prev_node->next = ptr1;
+	}
+	
+	return merged_list;
+	
+}
+
+node mergeSortLinkedList(node start, int size)
+{
+	
+	if(size<=1){
+		return start;
+	}
+	int size1, size2, i;
+	node ptr1, ptr2 ;
+	size1 = ceil((float)size/2);
+	size2 = floor((float)size/2);
+//	printf("%d %d\n", size1, size2);	
+	
+	ptr1= ptr2 = start;
+	for(i=1;i<=size1;i++){
+		ptr1 = ptr2;
+		ptr2=ptr2->next;
+		
+	}
+	
+	ptr1->next = NULL;
+	start = mergeSortLinkedList(start, size1);
+	ptr2 = 	mergeSortLinkedList(ptr2, size2);
+	start = merge(start, ptr2);
+	
+	return start;
+}
+
+
+int main(int argc, char **argv)
+{
+	int List[10] = {45, 34, 32, 79, 85, 12, 19, 83, 78, 56}, length = 10;
+	node start = makeLinkedList(List, length);
+	printf("initial linked list: ");
+	printLinkedList(start);
+	start = mergeSortLinkedList(start, length);
+	printf("\nreversed linked list: ");
+	printLinkedList(start);	
+	
+	return 0;
+}
+
+
+	
+
+
+	
+
