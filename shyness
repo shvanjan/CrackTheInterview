@@ -1,0 +1,63 @@
+#include <stdio.h>
+#include <malloc.h>
+#include <console.h>
+
+int main(void) {
+	// your code goes here
+
+	// T = no. of testcases
+	// Smax = Maximum shyness
+	// S_stood = no of persons who are already standing, initialized to S0;
+	// S_added = no of people who have been added, initialized to 0
+	// S = String which contains the shyness and no of people
+	// Nd = loop pointer, number of digits scanned - 1
+	// Nt = no of test cases done
+	// S_to_be_added = no of persons to be added for the current shyness level
+		int T, Smax, S_stood, S_added, Nd, Nt, S_to_be_added, i;
+	
+	printf("Hello");
+	// Input the number of test cases
+	scanf("%d",&T);
+
+	char S[1000]; // = '\0';
+	for(i = 0; i <1000; i++){
+		S[i] = '0';
+	}
+	//loop over testcases
+	for(Nt = 1; Nt <= T; Nt++){
+	//	printf("\n\n case # %d:", Nt);
+		
+		//printf("\nenter the maximum shyness level");
+		scanf("%d", &Smax);
+	
+			
+		//printf("\nenter the no of persons string");
+		scanf("%s", S);
+		//printf(":  %s",S);
+		
+		S_stood = S[0] - '0';
+		S_added = 0;
+		// value of Si = Si - '0'
+		
+		// loop over string S
+		for(Nd = 1; Nd <= Smax; Nd++){
+				if(S_stood >= Nd){
+					S_stood = S_stood + S[Nd] - '0';
+					S[Nd] = '0';
+				} else {
+					S_to_be_added = Nd - S_stood;
+					S_stood = S_stood + S_to_be_added + S[Nd] - '0';
+					S_added += S_to_be_added;
+					S[Nd] = '0';
+					
+				}
+			
+			}
+			
+			// print output for case no. Nt
+			printf("\n Case #%d: %d", Nt, S_added);
+			
+		}		
+		getch();
+	return 0;
+}
