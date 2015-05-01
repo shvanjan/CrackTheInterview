@@ -1,0 +1,108 @@
+#include <stdio.h>
+#include <malloc.h>
+
+
+struct node {
+	int data;
+	struct node* next;
+} ;
+	
+struct dbnode{
+	int data;
+	struct dbnode* next;
+	struct dbnode* prev;
+};
+	
+typedef struct node* node;
+typedef struct dbnode* dbnode;
+
+// function to reverse a singly linked list, returns the head of reversed linked list
+dbnode reversedbLinkedList(dbnode start)
+{
+	
+	dbnode first, second, temp;
+	first = start;
+	
+	
+	while(first!=NULL){
+		temp = first;
+		second = first->next;
+		first->next = first->prev;
+		first->prev = second;	
+		first = second;
+	}
+	
+	start = temp;
+	
+	return start;	
+	
+}
+	
+	
+dbnode makeNewdbNode(int data)
+{
+	dbnode new_node;
+	
+	new_node = (dbnode)malloc(sizeof(struct dbnode));
+	new_node->data = data;
+	new_node->next = NULL;
+	new_node->prev = NULL;
+	return new_node;
+}
+	
+	
+void printdbLinkedList(dbnode start){
+	dbnode first;
+	if(start==NULL){
+		printf("\nEmpty Linked list\n");
+	}
+	first = start;
+
+	
+	do{
+			
+		printf("%d ", first->data);		
+		first = first->next;
+		
+	} while(first!=NULL);
+	printf("\n");
+}
+
+
+dbnode makedbLinkedList(int List[], int length){
+	
+	int loop_ptr;
+	dbnode new_node, previous = NULL, start;
+	
+	for(loop_ptr = 0; loop_ptr < length; loop_ptr++)
+	{
+		
+		new_node = makeNewdbNode(List[loop_ptr]);		
+		if(previous!=NULL){			
+			previous->next = new_node;			
+		} else {
+			start = new_node;
+		}
+		
+		new_node->prev = previous;
+		previous = new_node;
+	}
+		
+	new_node->next = NULL;
+	return start;
+}
+	
+
+int main(int argc, char **argv)
+{
+	int List[8] = {34, 45, 32, 79, 85, 12, 19, 83}, length = 8;
+
+	dbnode dbstart = makedbLinkedList(List, length);
+	printf("initial linked list: ");
+	printdbLinkedList(dbstart);
+	dbstart = reversedbLinkedList(dbstart);
+	printf("\nreversed linked list: ");
+	printdbLinkedList(dbstart);	
+	
+	return 0;
+}
